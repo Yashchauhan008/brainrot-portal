@@ -1,11 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { User } from "@/lib/api";
+import { API_URL, type User } from "@/lib/api";
 
 export type Session = { token: string; refresh_token: string; user: User };
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3017";
 
 const SESSION_KEY = "brainrot_session";
 

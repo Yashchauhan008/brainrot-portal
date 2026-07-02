@@ -1,7 +1,13 @@
 import { getSession, refreshSession } from "@/lib/auth";
 
-export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3017";
+// Tolerate common env mistakes: a missing scheme (the browser would treat
+// the host as a relative path) and trailing slashes (would produce //auth/…).
+function normalizeBaseUrl(raw: string | undefined) {
+  const url = (raw ?? "http://localhost:3017").trim().replace(/\/+$/, "");
+  return /^https?:\/\//.test(url) ? url : `https://${url}`;
+}
+
+export const API_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL);
 
 export class ApiError extends Error {
   status: number;
