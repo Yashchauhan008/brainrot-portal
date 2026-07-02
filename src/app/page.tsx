@@ -46,11 +46,8 @@ export default function LandingPage() {
       </p>
 
       <div className="mt-10 flex gap-4">
-        <Link href="/signup" className="btn-primary !px-8 !py-3">
-          Get started
-        </Link>
-        <Link href="/login" className="btn-ghost !px-8 !py-3">
-          Login
+        <Link href="/login" className="btn-primary !px-8 !py-3">
+          Get started with Google
         </Link>
       </div>
 

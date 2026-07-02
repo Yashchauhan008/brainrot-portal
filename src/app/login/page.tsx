@@ -1,45 +1,99 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError, type User } from "@/lib/api";
-import { setSession } from "@/lib/auth";
+import { setSession, useSession } from "@/lib/auth";
 import BrainLogo from "@/components/BrainLogo";
+
+// OAuth client ids are public; env override for a different Google project.
+const GOOGLE_CLIENT_ID =
+  process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ??
+  "735451463373-ue4n6c037upnnq8hs44f1bsie646meil.apps.googleusercontent.com";
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: object) => void;
+          renderButton: (el: HTMLElement, options: object) => void;
+        };
+      };
+    };
+  }
+}
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const session = useSession();
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
+  const next = searchParams.get("next") ?? "/dashboard";
   const fromExtension = searchParams.get("from") === "extension";
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setBusy(true);
-    try {
-      const data = await api<{ token: string; refresh_token: string; user: User }>(
-        "/auth/login",
-        { body: { email, password } },
-      );
-      setSession({ token: data.token, refresh_token: data.refresh_token, user: data.user });
-      router.push(searchParams.get("next") ?? "/dashboard");
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Something went wrong");
-    } finally {
-      setBusy(false);
+  // Already logged in → straight to the dashboard (or wherever `next` says).
+  useEffect(() => {
+    if (session) router.replace(next);
+  }, [session, router, next]);
+
+  const handleCredential = useCallback(
+    async (response: { credential: string }) => {
+      setError("");
+      try {
+        const data = await api<{ token: string; refresh_token: string; user: User }>(
+          "/auth/google",
+          { body: { credential: response.credential } },
+        );
+        setSession({ token: data.token, refresh_token: data.refresh_token, user: data.user });
+        router.push(next);
+      } catch (err) {
+        setError(err instanceof ApiError ? err.message : "Something went wrong");
+      }
+    },
+    [router, next],
+  );
+
+  // Load Google Identity Services and render the sign-in button.
+  useEffect(() => {
+    if (session !== null) return; // hydrating or already logged in
+
+    const init = () => {
+      if (!window.google || !buttonRef.current) return;
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredential,
+      });
+      window.google.accounts.id.renderButton(buttonRef.current, {
+        theme: "filled_black",
+        size: "large",
+        shape: "pill",
+        text: "continue_with",
+        width: 300,
+      });
+    };
+
+    if (window.google?.accounts?.id) {
+      init();
+      return;
     }
-  }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.onload = init;
+    document.head.appendChild(script);
+  }, [session, handleCredential]);
+
+  if (session) return null;
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-16">
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <BrainLogo size={44} />
-        <h1 className="text-2xl font-bold">Welcome back</h1>
+        <h1 className="text-2xl font-bold">Welcome to BrainRot</h1>
         {fromExtension && (
           <p className="rounded-full border border-borderline bg-surface px-4 py-1.5 text-xs text-secondary">
             🧩 Login to unlock the extension counter
@@ -47,45 +101,15 @@ function LoginForm() {
         )}
       </div>
 
-      <form onSubmit={onSubmit} className="card space-y-4">
-        <div>
-          <label className="label" htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            required
-            className="input"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="label" htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            required
-            className="input"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
+      <div className="card flex flex-col items-center gap-4 py-10">
+        <p className="text-sm text-secondary">Sign in or create your account</p>
+        <div ref={buttonRef} />
         {error && <p className="text-sm text-[color:var(--critical)]">{error}</p>}
-
-        <button type="submit" disabled={busy} className="btn-primary w-full">
-          {busy ? "Logging in…" : "Login"}
-        </button>
-
-        <p className="text-center text-sm text-muted">
-          No account?{" "}
-          <Link href="/signup" className="font-medium text-accent-2 hover:underline">
-            Sign up
-          </Link>
+        <p className="px-6 text-center text-xs text-muted">
+          New here? The same button creates your account — no forms, no
+          passwords.
         </p>
-      </form>
+      </div>
     </main>
   );
 }
