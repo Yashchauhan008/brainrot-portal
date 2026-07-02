@@ -9,6 +9,7 @@ import {
   type TodayStats,
 } from "@/lib/api";
 import { clearSession, connectExtension, useSession, watchExtension } from "@/lib/auth";
+import ExtensionGuide from "@/components/ExtensionGuide";
 import HistoryChart from "@/components/HistoryChart";
 import StatCard from "@/components/StatCard";
 
@@ -89,6 +90,8 @@ export default function DashboardPage() {
           {error}
         </div>
       )}
+
+      {!extensionConnected && <ExtensionGuide />}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
