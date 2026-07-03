@@ -93,16 +93,11 @@ export default function DashboardPage() {
 
       {!extensionConnected && <ExtensionGuide />}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           label="Today"
           value={stats?.today.total ?? "–"}
-          hint="Reels + Shorts (UTC day)"
-        />
-        <StatCard
-          label="Last 24 hours"
-          value={stats?.last_24h.total ?? "–"}
-          hint="Rolling window — matches the bubble"
+          hint="Reels + Shorts, midnight to midnight — matches the bubble"
         />
         <StatCard
           label="YouTube Shorts"
