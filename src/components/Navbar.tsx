@@ -25,21 +25,37 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-borderline bg-background/80 backdrop-blur">
-      <nav className="mx-auto flex max-w-5xl items-center gap-6 px-6 py-3.5">
+      <nav className="relative mx-auto flex max-w-5xl items-center gap-4 px-6 py-3">
         <Link href="/dashboard" className="flex items-center gap-2 font-bold">
           <BrainLogo size={24} />
           <span>BrainRot</span>
         </Link>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 sm:hidden">
+          {LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                pathname.startsWith(link.href)
+                  ? "bg-surface-2 text-primary"
+                  : "text-muted hover:text-secondary"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-borderline bg-surface p-1 sm:flex">
           {LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
                 pathname.startsWith(link.href)
-                  ? "bg-surface-2 text-primary"
-                  : "text-muted hover:text-secondary"
+                  ? "border border-borderline bg-surface-2 text-primary"
+                  : "border border-transparent text-muted hover:text-secondary"
               }`}
             >
               {link.label}

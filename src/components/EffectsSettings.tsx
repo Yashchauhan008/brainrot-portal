@@ -117,7 +117,7 @@ export default function EffectsSettings({
               type="button"
               disabled={!settings}
               onClick={() => save({ [key]: !enabled })}
-              className={`rounded-xl border p-4 text-left transition ${
+              className={`rounded-2xl border p-4 text-left transition ${
                 enabled
                   ? "border-[color:var(--good)]/40 bg-surface-2"
                   : "border-borderline opacity-60 hover:opacity-80"

@@ -20,8 +20,8 @@ function CompetitorRow({
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl border px-4 py-3 ${
-        isMe ? "border-accent-2/50 bg-surface-2" : "border-borderline"
+      className={`flex items-center gap-4 rounded-2xl border px-4 py-3 ${
+        isMe ? "border-accent/50 bg-surface-2" : "border-borderline"
       }`}
     >
       <span className="w-8 text-center text-lg">
@@ -45,7 +45,7 @@ function CompetitorRow({
             className="h-full rounded-full"
             style={{
               width: `${width}%`,
-              background: "linear-gradient(90deg, var(--accent), var(--accent-2))",
+              background: "var(--accent)",
             }}
           />
         </div>
@@ -204,7 +204,7 @@ export default function FriendsPage() {
                 {invites.map((invite) => (
                   <li
                     key={invite.id}
-                    className="flex items-center gap-2 rounded-xl border border-borderline bg-surface-2 px-3 py-2"
+                    className="flex items-center gap-2 rounded-2xl border border-borderline bg-surface-2 px-3 py-2"
                   >
                     <code className="text-sm font-bold tracking-wider">{invite.code}</code>
                     {invite.status === "pending" ? (

@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0b10;
-  --surface: #17171c;
-  --surface-2: #1f1f26;
-  --border: #2a2a33;
-  --text-primary: #f4f4f6;
-  --text-secondary: #b7b7c2;
-  --text-muted: #7c7c8a;
-  --accent: #ff6b81;
-  --accent-2: #a55eea;
-  --series-yt: #3987e5;
-  --series-ig: #199e70;
-  --good: #0ca30c;
-  --critical: #d03b3b;
+  --background: #0c0e0d;
+  --surface: #141715;
+  --surface-2: #1d211e;
+  --border: #262b27;
+  --text-primary: #f2f4f2;
+  --text-secondary: #b6bdb7;
+  --text-muted: #7a827b;
+  --accent: #4f9d6b;
+  --accent-2: #8fd6ac;
+  --series-yt: #4f9d6b;
+  --series-ig: #a9c8b2;
+  --good: #4f9d6b;
+  --critical: #d05a4e;
 }
 
 @theme inline {
@@ -40,12 +40,12 @@ body {
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-borderline bg-surface p-6;
+    @apply rounded-3xl border border-borderline bg-surface p-6;
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-50 disabled:pointer-events-none;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    background: var(--accent);
   }
 
   .btn-ghost {
@@ -53,10 +53,16 @@ body {
   }
 
   .input {
-    @apply w-full rounded-xl border border-borderline bg-surface-2 px-4 py-3 text-sm text-primary placeholder:text-muted outline-none transition focus:border-accent-2;
+    @apply w-full rounded-xl border border-borderline bg-surface-2 px-4 py-3 text-sm text-primary placeholder:text-muted outline-none transition focus:border-accent;
   }
 
   .label {
     @apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold;
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    color: var(--accent-2);
   }
 }

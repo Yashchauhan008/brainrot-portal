@@ -35,8 +35,8 @@ export default function LandingPage() {
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center px-6 pb-20 pt-24 text-center">
       <div className="flex items-center gap-3">
         <BrainLogo size={56} />
-        <h1 className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent">
-          BrainRot Counter
+        <h1 className="text-5xl font-extrabold tracking-tight">
+          BrainRot <span className="text-accent-2">Counter</span>
         </h1>
       </div>
 

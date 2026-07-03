@@ -69,17 +69,27 @@ export default function DashboardPage() {
     <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
       <div className="mb-8 flex flex-wrap items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Hey {session.user.name} 👋</h1>
-          <p className="mt-1 text-sm text-secondary">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Welcome back, <span className="font-semibold text-muted">{session.user.name}</span>
+          </h1>
+          <p className="mt-1.5 text-sm text-secondary">
             Here&apos;s how rotten your brain is today.
           </p>
         </div>
         <span
           className={`ml-auto rounded-full border px-4 py-1.5 text-xs font-medium ${
             extensionConnected
-              ? "border-[color:var(--good)]/40 text-[color:var(--good)]"
+              ? "border-transparent"
               : "border-borderline text-muted"
           }`}
+          style={
+            extensionConnected
+              ? {
+                  background: "color-mix(in srgb, var(--good) 15%, transparent)",
+                  color: "var(--accent-2)",
+                }
+              : undefined
+          }
         >
           {extensionConnected ? "🧩 Extension connected" : "🧩 Extension not detected"}
         </span>

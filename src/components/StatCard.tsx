@@ -14,16 +14,16 @@ export default function StatCard({
       <div className="flex items-center gap-2">
         {accentVar && (
           <span
-            className="inline-block h-2.5 w-2.5 rounded-full"
+            className="inline-block h-2 w-2 rounded-full"
             style={{ background: accentVar }}
           />
         )}
-        <span className="text-xs font-medium uppercase tracking-wide text-muted">
-          {label}
-        </span>
+        <span className="text-sm font-medium text-secondary">{label}</span>
       </div>
-      <div className="mt-2 text-4xl font-bold tabular-nums">{value}</div>
-      {hint && <div className="mt-1 text-xs text-muted">{hint}</div>}
+      <div className="mt-3 text-4xl font-semibold tracking-tight tabular-nums">
+        {value}
+      </div>
+      {hint && <div className="mt-1.5 text-xs text-muted">{hint}</div>}
     </div>
   );
 }
