@@ -66,3 +66,72 @@ body {
     color: var(--accent-2);
   }
 }
+
+/* —— Landing page motion & display —— */
+.landing-display {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.landing-grid {
+  background-image:
+    linear-gradient(rgba(79, 157, 107, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 157, 107, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+@keyframes landing-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.landing-float {
+  animation: landing-float 5.5s ease-in-out infinite;
+}
+
+@keyframes landing-toast {
+  0%,
+  100% {
+    opacity: 0.92;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+.landing-toast {
+  animation: landing-toast 3.2s ease-in-out infinite;
+}
+
+@keyframes landing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.landing-marquee {
+  overflow: hidden;
+}
+
+.landing-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: landing-marquee 38s linear infinite;
+}
+
+.landing-brain-wrap {
+  min-height: 320px;
+  justify-content: center;
+}

@@ -2,14 +2,65 @@
 
 import { useEffect, useState } from "react";
 
+const EXTENSION_REPO = "https://github.com/Yashchauhan008/brainrot-extension";
+const EXTENSION_ZIP = `${EXTENSION_REPO}/archive/refs/heads/main.zip`;
+const CHROME_EXTENSIONS_URL = "chrome://extensions";
+
+function ChromeExtensionsLink({
+  className = "",
+}: {
+  className?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    // Chrome blocks navigating to chrome:// from https pages — copy instead.
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(CHROME_EXTENSIONS_URL);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback if clipboard is blocked
+      window.prompt("Copy this and paste it in the address bar:", CHROME_EXTENSIONS_URL);
+    }
+  }
+
+  return (
+    <a
+      href={CHROME_EXTENSIONS_URL}
+      onClick={handleClick}
+      title="Click to copy — paste in Chrome’s address bar"
+      className={`font-semibold text-accent-2 underline underline-offset-2 hover:brightness-110 ${className}`}
+    >
+      {copied ? "Copied! Paste in the address bar" : "chrome://extensions"}
+    </a>
+  );
+}
+
 const STEPS = [
   {
-    title: "Get the extension folder",
+    title: "Get the extension",
     detail: (
       <>
-        Download / clone the BrainRot project and locate the{" "}
-        <code className="rounded bg-background px-1.5 py-0.5 text-xs">extension/</code>{" "}
-        folder.
+        <a
+          href={EXTENSION_ZIP}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-accent-2 underline underline-offset-2 hover:brightness-110"
+        >
+          Download the ZIP
+        </a>{" "}
+        or clone{" "}
+        <a
+          href={EXTENSION_REPO}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-accent-2 underline underline-offset-2 hover:brightness-110"
+        >
+          github.com/Yashchauhan008/brainrot-extension
+        </a>
+        , then unzip it.
       </>
     ),
   },
@@ -17,11 +68,8 @@ const STEPS = [
     title: "Open Chrome extensions",
     detail: (
       <>
-        Go to{" "}
-        <code className="rounded bg-background px-1.5 py-0.5 text-xs">
-          chrome://extensions
-        </code>{" "}
-        and switch on <strong>Developer mode</strong> (top right).
+        Go to <ChromeExtensionsLink /> and switch on{" "}
+        <strong>Developer mode</strong> (top right).
       </>
     ),
   },
@@ -29,9 +77,12 @@ const STEPS = [
     title: "Load it",
     detail: (
       <>
-        Click <strong>Load unpacked</strong> and select the{" "}
-        <code className="rounded bg-background px-1.5 py-0.5 text-xs">extension/</code>{" "}
-        folder.
+        Click <strong>Load unpacked</strong> and select the unzipped folder (the
+        one that contains{" "}
+        <code className="rounded bg-background px-1.5 py-0.5 text-xs">
+          manifest.json
+        </code>
+        ).
       </>
     ),
   },
@@ -89,9 +140,17 @@ export default function ExtensionGuide() {
       </ol>
 
       <p className="mt-5 text-xs text-muted">
-        Already installed? Make sure it's enabled in{" "}
-        <code className="rounded bg-background px-1.5 py-0.5">chrome://extensions</code>{" "}
-        and reload this page — the extension announces itself on page load.
+        Already installed? Make sure it&apos;s enabled in <ChromeExtensionsLink />{" "}
+        and reload this page — the extension announces itself on page load. Repo:{" "}
+        <a
+          href={EXTENSION_REPO}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent-2 underline underline-offset-2"
+        >
+          brainrot-extension
+        </a>
+        .
       </p>
     </div>
   );

@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BrainRot Counter",
+  title: "BrainRot Counter — track Reels, Shorts & roast your scroll",
   description:
-    "Track how many Reels and Shorts you watch, and compete with friends for the cleanest brain.",
+    "Every Reel. Every Short. Counted. A Chrome extension + portal that tracks your brainrot, decays your brain icon, and lets friends compete for the cleanest mind.",
 };
 
 export default function RootLayout({
